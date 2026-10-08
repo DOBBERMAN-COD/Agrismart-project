@@ -1,0 +1,14 @@
+.listing-image{
+    height:240px;
+    width:100%;
+    object-fit:cover;
+}
+
+.listing-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;  
+}
+
+.listing-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0 , 0, 0.15);
+}

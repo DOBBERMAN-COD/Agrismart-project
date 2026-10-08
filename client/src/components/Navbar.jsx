@@ -1,39 +1,57 @@
+import { Link, NavLink } from "react-router-dom";
+
 function Navbar() {
-    return(
-        
+  const navLinkClass = ({ isActive }) =>
+    isActive ? "nav-link px-3 text-success fw-bold" : "nav-link px-3";
+
+  return (
     <nav className="navbar navbar-expand-lg bg-white border-bottom">
+      <div className="container">
+        <Link className="navbar-brand fw-bold fs-4" to="/">
+          AgriSmart
+        </Link>
 
-     <div className="container">
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarContent"
+        >
+          ☰
+        </button>
 
-            <a className="navbar-brand fw-bold fs-4" href="#">AgriSmart</a>
-
-            <button 
-            className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">☰</button>
-
-            <div className="collapse navbar-collapse" id="navbarContent">
-                <ul className="navbar-nav" >
-                <li className="nav-item">
-                    <a className="nav-link px-3" href="#">Home</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link px-3" href="#">Waste Listings</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link px-3" href="#">Get Transport</a>
-                </li>
-                <li className="nav-item">
-                    <a className="nav-link px-3" href="#">Login</a>
-                </li>
-                <li className="nav-item">
-                    <a className="btn btn-success rounded-pill px-4 ms-lg-2" href="#">Register</a>
-                </li>
-                </ul>
-                </div>
-
-            </div>
-        </nav>
-        
-    )
+        <div className="collapse navbar-collapse" id="navbarContent">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <NavLink to="/" className={navLinkClass}>
+                Home
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className={navLinkClass} to="/listings">
+                Waste Listings
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className={navLinkClass} to="/transport">
+                Get Transport
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className={navLinkClass} to="/login">
+                Login
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className={navLinkClass} to="/register">
+                Register
+              </NavLink>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
 }
 
-export default Navbar
+export default Navbar;

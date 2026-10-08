@@ -1,20 +1,26 @@
-import Navbar from './components/Navbar'
-import Home from './components/Home'
-import HowItWorks from './components/HowItWorks'
-import FeaturedListings from './components/FeaturedListings'
-import CallToAction from './components/CallToAction'
-import Footer from './components/Footer'
+import { BrowserRouter, Routes, Route} from 'react-router-dom'
+import Layout from './components/Layout'
+import Home from './pages/Home'
+import WasteListings from './pages/WasteListings'
+import GetTransport from './pages/GetTransport'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import NotFound from './pages/NotFound'
 
-function App() {
+function App () {
   return (
-    <>
-      <Navbar />
-      <Home />
-      <HowItWorks/>
-      <FeaturedListings/>
-      <CallToAction/>
-      <Footer/>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<Layout/>}>
+        <Route path="/" element={<Home/>}/>
+        <Route path="/listings" element={<WasteListings/>}/>
+        <Route path="/transport" element={<GetTransport/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/register" element={<Register/>}/>
+        <Route path="*" element={<NotFound/>}/>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
