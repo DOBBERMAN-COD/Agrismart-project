@@ -1,4 +1,7 @@
-import img from "../assets/A_pile_of_straw_after_extracting_grains.jpg";
+import {Link } from "react-router-dom"
+
+const img = "http://localhost:5000/images/A_pile_of_straw_after_extracting_grains.jpg";
+
 function Home() {
   return (
     <section className="py-5">
@@ -19,12 +22,12 @@ function Home() {
             </p>
 
             <div className="d-flex gap-3 flex-wrap">
-              <button className="btn btn-primary rounded-pill px-4 py-2 ">
+              <Link to="/listings" className="btn btn-primary rounded-pill px-4 py-2 ">
                 Browse Waste
-              </button>
-              <button className="btn btn-outline-success rounded-pill px-4 py-2">
+              </Link>
+              <Link to="/create-listing" className="btn btn-outline-success rounded-pill px-4 py-2">
                 Sell Waste
-              </button>
+              </Link>
             </div>
           </div>
 

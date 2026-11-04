@@ -1,45 +1,38 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ListingCard from "../components/ListingCard";
-import maizeStalks from '../assets/Maize_stalks_-_geograph.org.uk_-_5359105.jpg'
-import coffeHusks from '../assets/Coffee_husks.JPG'
-import cowManure from '../assets/Cow_and_Buffalo_Dung_As_Manure.jpg'
-
+import { useLocation } from "react-router-dom";
 
 function WasteListings() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Waste Types");
 
-  const listings = [
-    {
-      type: "Maize Stalks",
-      category: "Crop Residue",
-      description:
-        "Fresh and high-quality maize stalks available for livestock bedding and fuel.",
-      price: 100,
-      unit: "bag",
-      location: "Nyeri",
-      image: maizeStalks
-    },
-    {
-      type: "Coffee Husks",
-      category: "Food Processing Waste",
-      description: "Fresh coffee husks available for biofuel and composting",
-      price: 120,
-      unit: "bag",
-      location: "Kiambu",
-      image: coffeHusks
-    },
-    {
-      type: "Cow Manure",
-      category: "Animal Waste",
-      description:
-        "Fresh cow manure available for organic farming and composting",
-      price: 150,
-      unit: "bag",
-      location: "Nakuru",
-      image: cowManure
-    },
-  ];
+  const [listings, setListings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+  const location = useLocation();
+  const successMessage = location.state?.successMessage;
+
+  useEffect(() => {
+    const fetchListings = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/listings");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch waste listings.");
+        }
+
+        const data = await response.json();
+        setListings(data);
+      } catch (error) {
+        console.error("Fetching listings error:", error);
+        setErrorMessage(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchListings();
+  }, []);
 
   const filteredListings = listings.filter((listing) => {
     const searchText = searchTerm.toLowerCase();
@@ -59,6 +52,16 @@ function WasteListings() {
   return (
     <div className="container text-center pb-5">
       <h1>Agricultural Waste Marketplace</h1>
+      {successMessage && (
+        <div className="alert alert-success" role="alert">
+          {successMessage}
+        </div>
+      )}
+      {errorMessage && (
+        <div className="alert alert-danger" role="alert">
+          {errorMessage}
+        </div>
+      )}
       <p className="text-muted w-75 mx-auto mb-5">
         Turn agricultural waste into value. Explore available farm by-products,
         compare prices, and connect with farmers offering useful materials for
@@ -92,17 +95,23 @@ function WasteListings() {
       </div>
 
       <div className="row g-4">
-        {filteredListings.length === 0 && (
+        {isLoading && (
           <div className="col-12">
-            <p className="text-muted">
-              No listings found. Try a different search.
-            </p>
+            <p className="text-muted">Loading listings ...</p>
           </div>
         )}
 
-        {filteredListings.map((listing) => (
-          <ListingCard key={listing.type} listing={listing} />
-        ))}
+        {!isLoading && !errorMessage && filteredListings.length === 0 && (
+          <div className="col-12">
+            <p className="text-muted">No listings found.</p>
+          </div>
+        )}
+
+        {!isLoading &&
+          !errorMessage &&
+          filteredListings.map((listing) => (
+            <ListingCard key={listing._id} listing={listing} />
+          ))}
       </div>
     </div>
   );

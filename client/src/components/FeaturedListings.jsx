@@ -1,6 +1,6 @@
-import maizeStalksImage from "../assets/Maize_stalks_-_geograph.org.uk_-_5359105.jpg";
-import coffeeHusksImage from "../assets/Coffee_husks.JPG";
-import cowManureImage from "../assets/Cow_and_Buffalo_Dung_As_Manure.jpg";
+const maizeStalksImage = "http://localhost:5000/images/Maize_stalks_-_geograph.org.uk_-_5359105.jpg";
+const coffeeHusksImage = "http://localhost:5000/images/Coffee_husks.JPG";
+const cowManureImage = "http://localhost:5000/images/Cow_and_Buffalo_Dung_As_Manure.jpg";
 
 function FeaturedListings() {
   return (

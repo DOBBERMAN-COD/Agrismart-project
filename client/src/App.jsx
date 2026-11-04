@@ -6,6 +6,7 @@ import GetTransport from './pages/GetTransport'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
+import CreateListing from "./pages/CreateListing"
 
 function App () {
   return (
@@ -18,6 +19,7 @@ function App () {
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="*" element={<NotFound/>}/>
+        <Route path="/create-listing" element={<CreateListing/>}/>
         </Route>
       </Routes>
     </BrowserRouter>
