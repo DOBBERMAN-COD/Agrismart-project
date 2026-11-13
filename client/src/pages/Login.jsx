@@ -1,9 +1,14 @@
 
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/useAuth.js";
 
 function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get the shared login function from AuthContext.
+  const { login } = useAuth();
 
   // Form input state
   const [email, setEmail] = useState("");
@@ -12,11 +17,9 @@ function Login() {
   // UI state
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
-  const location = useLocation();
-  const successMessage = location.state?.successMessage;
-
   const [showPassword, setShowPassword] = useState(false);
+
+  const successMessage = location.state?.successMessage;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -25,29 +28,11 @@ function Login() {
     setErrorMessage("");
 
     try {
-      const response = await fetch(
-        "http://localhost:5000/api/auth/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({
-            email,
-            password,
-          }),
-        }
-      );
+      // Authenticate through the shared AuthContext.
+      const authenticatedUser = await login(email, password);
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Login failed. Please try again.");
-      }
-
-      // Redirect after successful login.
-      if (data.user?.role === "farmer") {
+      // Redirect according to the user's role.
+      if (authenticatedUser.role === "farmer") {
         navigate("/my-listings");
       } else {
         navigate("/");
@@ -72,10 +57,10 @@ function Login() {
                 Log in to your AgriSmart account.
               </p>
 
-              {successMessage && ( 
+              {successMessage && (
                 <div className="alert alert-success" role="alert">
                   {successMessage}
-                  </div>
+                </div>
               )}
 
               {errorMessage && (
@@ -106,23 +91,30 @@ function Login() {
                     Password
                   </label>
 
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    className="form-control"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    required
-                  />
+                  <div className="input-group">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      id="password"
+                      className="form-control"
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                      required
+                    />
 
-                  <button
-                    type="button"
-                    className="btn btn-outline-secondary"
-                    onClick={() => setShowPassword((previous) => !previous)}
-                    aria-label={showPassword ? "Hide password" : "Show password"}>
+                    <button
+                      type="button"
+                      className="btn btn-outline-secondary"
+                      onClick={() =>
+                        setShowPassword((previous) => !previous)
+                      }
+                      aria-label={
+                        showPassword ? "Hide password" : "Show password"
+                      }
+                    >
                       {showPassword ? "Hide" : "Show"}
                     </button>
+                  </div>
                 </div>
 
                 <button
