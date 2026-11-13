@@ -7,6 +7,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import NotFound from './pages/NotFound'
 import CreateListing from "./pages/CreateListing"
+import MyListings from "./pages/MyListings"
 
 function App () {
   return (
@@ -18,8 +19,9 @@ function App () {
         <Route path="/transport" element={<GetTransport/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
-        <Route path="*" element={<NotFound/>}/>
         <Route path="/create-listing" element={<CreateListing/>}/>
+        <Route path="/my-listings" element={<MyListings/>}/>
+        <Route path="*" element={<NotFound/>}/>
         </Route>
       </Routes>
     </BrowserRouter>

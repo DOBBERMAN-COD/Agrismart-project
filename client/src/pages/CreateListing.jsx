@@ -123,6 +123,7 @@ function CreateListing() {
         "http://localhost:5000/api/listings",
         {
             method: "POST",
+            credentials: "include",
             body: listingData,
         }
       );

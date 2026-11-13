@@ -29,6 +29,11 @@ const wasteListingSchema = new mongoose.Schema({
     image: {
         type: String,
     },
+    farmer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
 });
 
 const WasteListing = mongoose.model(
