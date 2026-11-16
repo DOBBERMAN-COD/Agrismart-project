@@ -1,24 +1,25 @@
 
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/useAuth.js";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
-  const { user, isAuthLoading,logout } = useAuth();
+  const { user, isAuthLoading, logout } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogout = async () =>{
-    try{
+  const handleLogout = async () => {
+    try {
       await logout();
+
       navigate("/login", {
         replace: true,
         state: {
-          successMessage: "You have logged out successfully."
+          successMessage: "You have logged out successfully.",
         },
       });
     } catch (error) {
       console.error("Could not log out:", error);
     }
-  }
+  };
 
   const navLinkClass = ({ isActive }) =>
     isActive
@@ -47,7 +48,6 @@ function Navbar() {
         <div className="collapse navbar-collapse" id="navbarContent">
           <ul className="navbar-nav ms-auto align-items-lg-center">
 
-            {/* Public navigation links */}
             <li className="nav-item">
               <NavLink to="/" end className={navLinkClass}>
                 Home
@@ -56,7 +56,7 @@ function Navbar() {
 
             {!isAuthLoading && (
               <>
-                {/* Navigation for logged-out users */}
+                {/* Logged-out navigation */}
                 {!user && (
                   <>
                     <li className="nav-item">
@@ -88,19 +88,7 @@ function Navbar() {
                   </>
                 )}
 
-                {user && (
-                  <li className="nav-item ms-lg-2">
-                    <button 
-                        type="button"
-                        className="btn btn-outline-danger btn-sm px-3"
-                        onClick={handleLogout}
-                        >
-                          Logout
-                        </button>
-                  </li>
-                )}
-
-                {/* Navigation for farmers */}
+                {/* Farmer navigation */}
                 {user?.role === "farmer" && (
                   <>
                     <li className="nav-item">
@@ -123,7 +111,7 @@ function Navbar() {
                   </>
                 )}
 
-                {/* Navigation for buyers */}
+                {/* Buyer navigation */}
                 {user?.role === "buyer" && (
                   <>
                     <li className="nav-item">
@@ -140,7 +128,7 @@ function Navbar() {
                   </>
                 )}
 
-                {/* Navigation for drivers */}
+                {/* Driver navigation */}
                 {user?.role === "driver" && (
                   <li className="nav-item">
                     <NavLink to="/transport" className={navLinkClass}>
@@ -148,9 +136,44 @@ function Navbar() {
                     </NavLink>
                   </li>
                 )}
+
+                {/* Authenticated user's account menu */}
+                {user && (
+                  <li className="nav-item dropdown ms-lg-3">
+                    <button
+                      className="btn btn-outline-success dropdown-toggle"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      {user.name || "My Account"}
+                    </button>
+
+                    <ul className="dropdown-menu dropdown-menu-end">
+                      <li>
+                        <span className="dropdown-item-text">
+                          <strong>{user.role}</strong>
+                        </span>
+                      </li>
+
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+
+                      <li>
+                        <button
+                          type="button"
+                          className="dropdown-item text-danger"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </button>
+                      </li>
+                    </ul>
+                  </li>
+                )}
               </>
             )}
-
           </ul>
         </div>
       </div>

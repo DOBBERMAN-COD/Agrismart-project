@@ -20,6 +20,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   const successMessage = location.state?.successMessage;
+  const redirectTo =location.state?.from?.pathname;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -32,10 +33,12 @@ function Login() {
       const authenticatedUser = await login(email, password);
 
       // Redirect according to the user's role.
-      if (authenticatedUser.role === "farmer") {
-        navigate("/my-listings");
+      if (redirectTo) { 
+        navigate(redirectTo, {replace: true });
+      } else if (authenticatedUser.role === "farmer") {
+        navigate("/my-listings", {replace:true});
       } else {
-        navigate("/");
+        navigate ("/", {replace: true})
       }
     } catch (error) {
       console.error("Login error:", error);
